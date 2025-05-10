@@ -21,28 +21,32 @@ class Note:
                               bg="#FFF8DC", highlightthickness=0)
         self.canvas.pack(expand=True, fill="both")
         
-        # Add decorative border
-        self.canvas.create_rectangle(20, 20, window_width-20, window_height-20, 
+        # Add decorative border with more padding
+        border_padding = 40
+        self.canvas.create_rectangle(border_padding, border_padding, 
+                                   window_width-border_padding, window_height-border_padding, 
                                    outline="#8B4513", width=2)  # Brown border
         
         # Add the message
-        message = """Cher Papa,
+        message = """Joyeux Anniversaire Papounet!
 
-Joyeux Anniversaire! 
-Je te souhaite une journée 
-remplie de bonheur et d'amour.
+J'espere que tu passes une bonne journee 
+d'anniversaire, et que ce petit texte 
+vibe-code te fait plaisir ♥
 
-Avec tout mon amour,
-[Votre nom]"""
+Je t'aime a la follie papa, 
+joyeux anniversaire!!!!"""
         
-        # Add the text with decorative font
+        # Add the text with decorative font and proper margins
+        text_margin = 80  # Increased margin from edges
         self.canvas.create_text(
             window_width//2,
             window_height//2,
             text=message,
             font=("Brush Script MT", 24),
             fill="#8B4513",  # Brown text
-            justify=tk.CENTER
+            justify=tk.CENTER,
+            width=window_width - (2 * text_margin)  # Ensure text stays within margins
         )
         
         # Add a close button
