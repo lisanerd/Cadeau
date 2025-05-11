@@ -114,20 +114,20 @@ What am I?"""
             # Show correct answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 300,  # Doubled from 150
+                self.window_height//2 + 400,  # Moved down from +300 to +400
                 text="Correct! The answer is Echo!",
-                font=("Arial", 28, "bold"),  # Doubled from 14
+                font=("Arial", 28, "bold"),
                 fill="green"
             )
             # Show the next button
-            self.next_button.pack(pady=10)  # Doubled from 5
+            self.next_button.pack(pady=10)
         else:
             # Show incorrect answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 300,  # Doubled from 150
+                self.window_height//2 + 400,  # Moved down from +300 to +400
                 text="Try again!",
-                font=("Arial", 28, "bold"),  # Doubled from 14
+                font=("Arial", 28, "bold"),
                 fill="red"
             )
     
