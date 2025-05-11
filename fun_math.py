@@ -1,13 +1,14 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
+import fun_science
 
 class FunMath:
-    def __init__(self, main_frame, window_width, window_height, show_note_callback):
+    def __init__(self, main_frame, window_width, window_height, show_riddles_callback):
         self.main_frame = main_frame
         self.window_width = window_width
         self.window_height = window_height
-        self.show_note_callback = show_note_callback
+        self.show_riddles_callback = show_riddles_callback
         self.feedback_text = None  # Store reference to feedback text
         
         # Clear all widgets from the main frame
@@ -28,8 +29,10 @@ class FunMath:
         # Add the math problem
         problem = """Here's a math problem for you, Papa!
 
-If you have 5 apples and give 4 to your children,
-how many apples do you have left?"""
+What is the value of the definite integral:
+∫(from 0 to π) sin(x) dx
+
+(Hint: The answer is a whole number)"""
         
         # Add the text with decorative font
         text_margin = 160  # Doubled from 80
@@ -43,61 +46,59 @@ how many apples do you have left?"""
             width=window_width - (2 * text_margin)
         )
         
-        # Create a frame for the input box and buttons
+        # Create a frame for the input box
         input_frame = tk.Frame(self.main_frame, bg="#FFF8DC")
-        input_frame.place(x=window_width//2, y=window_height//2 + 100, anchor="center")  # Doubled from 50
+        input_frame.place(x=window_width//2, y=window_height//2 + 50, anchor="center")  # Moved up from +100
         
-        # Add input box with a visible border
+        # Add input box
         self.answer_entry = tk.Entry(
             input_frame,
-            font=("Arial", 28),  # Doubled from 14
-            width=25,
-            bg="white",
-            fg="black",
-            relief=tk.SOLID,  # Solid border
-            bd=6,            # Doubled from 3
-            highlightthickness=4,  # Doubled from 2
-            highlightcolor="black"
+            font=("Arial", 28),
+            width=20
         )
-        self.answer_entry.pack(pady=20)  # Doubled from 10
+        self.answer_entry.pack(pady=20)
         
-        # Bind the key press event to clear feedback
+        # Bind key press event to clear feedback
         self.answer_entry.bind('<Key>', self.clear_feedback)
+        
+        # Create a frame for the buttons
+        button_frame = tk.Frame(self.main_frame, bg="#FFF8DC")
+        button_frame.place(x=window_width//2, y=window_height//2 + 250, anchor="center")  # Moved down from +200 to prevent overlap
         
         # Add submit button
         submit_button = tk.Button(
-            input_frame,
+            button_frame,
             text="Submit Answer",
-            font=("Arial", 24),  # Doubled from 12
+            font=("Arial", 24),
             command=self.check_answer,
             bg="#8B4513",
             fg="white",
             relief=tk.RAISED
         )
-        submit_button.pack(pady=10)  # Doubled from 5
+        submit_button.pack(pady=10)  # Changed from side=tk.LEFT to pady
         
         # Add a back button
         back_button = tk.Button(
-            input_frame,
+            button_frame,
             text="Retour aux énigmes",
-            font=("Arial", 24),  # Doubled from 12
-            command=self.show_note_callback,
+            font=("Arial", 24),
+            command=self.show_riddles_callback,
             bg="#8B4513",
             fg="white",
             relief=tk.RAISED
         )
-        back_button.pack(pady=10)  # Doubled from 5
+        back_button.pack(pady=10)  # Changed from side=tk.LEFT to pady
         
         # Create next button but don't show it yet
         self.next_button = tk.Button(
-            input_frame,
-            text="Suivant",
-            font=("Arial", 24),  # Doubled from 12
+            button_frame,
+            text="Next Question",
+            font=("Arial", 24),
             command=self.show_next,
             bg="#FFF8DC",
             fg="black",
             relief=tk.RAISED,
-            borderwidth=4  # Doubled from 2
+            borderwidth=4
         )
     
     def clear_feedback(self, event=None):
@@ -108,27 +109,28 @@ how many apples do you have left?"""
         
     def check_answer(self):
         answer = self.answer_entry.get().strip().lower()
-        if answer == "1":
+        if answer == "2":
             # Show correct answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 300,  # Doubled from 150
-                text="Correct! You have 1 apple left!",
-                font=("Arial", 28, "bold"),  # Doubled from 14
+                self.window_height//2 + 400,  # Moved down from +300 to make room for buttons
+                text="Correct! The integral equals 2!",
+                font=("Arial", 28, "bold"),
                 fill="green"
             )
             # Show the next button
-            self.next_button.pack(pady=10)  # Doubled from 5
+            self.next_button.pack(pady=10)
         else:
             # Show incorrect answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 300,  # Doubled from 150
+                self.window_height//2 + 400,  # Moved down from +300 to make room for buttons
                 text="Try again!",
-                font=("Arial", 28, "bold"),  # Doubled from 14
+                font=("Arial", 28, "bold"),
                 fill="red"
             )
     
     def show_next(self):
-        # Placeholder for next screen
-        pass 
+        # Create and show the science question
+        fun_science.FunScience(self.main_frame, self.window_width, self.window_height, 
+                             lambda: self.__init__(self.main_frame, self.window_width, self.window_height, self.show_riddles_callback)) 
