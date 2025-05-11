@@ -1,31 +1,30 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
+import fun_riddles
 
 class Note:
-    def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("Birthday Note")
+    def __init__(self, main_frame, window_width, window_height, show_envelope_callback, show_instructions_callback):
+        self.main_frame = main_frame
+        self.window_width = window_width
+        self.window_height = window_height
+        self.show_envelope_callback = show_envelope_callback
+        self.show_instructions_callback = show_instructions_callback
         
-        # Set fixed window size
-        window_width = 600
-        window_height = 400
-        self.root.geometry(f"{window_width}x{window_height}")
-        
-        # Create main frame with a light background
-        self.main_frame = tk.Frame(self.root, bg="#FFF8DC")  # Cream color background
-        self.main_frame.pack(expand=True, fill="both")
+        # Clear all widgets from the main frame
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
         
         # Create canvas for the note
         self.canvas = tk.Canvas(self.main_frame, width=window_width, height=window_height, 
                               bg="#FFF8DC", highlightthickness=0)
         self.canvas.pack(expand=True, fill="both")
         
-        # Add decorative border with more padding
-        border_padding = 40
+        # Add decorative border
+        border_padding = 80
         self.canvas.create_rectangle(border_padding, border_padding, 
                                    window_width-border_padding, window_height-border_padding, 
-                                   outline="#8B4513", width=2)  # Brown border
+                                   outline="#8B4513", width=4)
         
         # Add the message
         message = """Joyeux Anniversaire Papounet!
@@ -38,31 +37,46 @@ Je t'aime a la follie papa,
 joyeux anniversaire!!!!"""
         
         # Add the text with decorative font and proper margins
-        text_margin = 80  # Increased margin from edges
+        text_margin = 160
         self.canvas.create_text(
             window_width//2,
-            window_height//2,
+            window_height//2 - 100,
             text=message,
-            font=("Brush Script MT", 24),
-            fill="#8B4513",  # Brown text
+            font=("Brush Script MT", 48),
+            fill="#8B4513",
             justify=tk.CENTER,
-            width=window_width - (2 * text_margin)  # Ensure text stays within margins
+            width=window_width - (2 * text_margin)
         )
         
-        # Add a close button
-        close_button = tk.Button(
+        # Add a back button in the bottom left
+        back_button = tk.Button(
             self.main_frame,
-            text="Fermer",
-            font=("Arial", 12),
-            command=self.root.destroy,
-            bg="#8B4513",
-            fg="white",
-            relief=tk.RAISED
+            text="Retour à l'enveloppe",
+            font=("Arial", 24),
+            command=self.show_envelope_callback,
+            bg="#FFF8DC",
+            fg="#8B4513",
+            relief=tk.RAISED,
+            borderwidth=4
         )
-        close_button.pack(pady=10)
+        back_button.place(x=border_padding + 20, y=window_height - 120)
         
-    def run(self):
-        self.root.mainloop()
+        # Add a next button in the bottom right
+        next_button = tk.Button(
+            self.main_frame,
+            text="Suivant",
+            font=("Arial", 24),
+            command=self.show_instructions_callback,
+            bg="#FFF8DC",
+            fg="black",
+            relief=tk.RAISED,
+            borderwidth=4
+        )
+        next_button.place(x=window_width - border_padding - 200, y=window_height - 120)
+    
+    def show_riddles(self):
+        # Create and show the riddles view
+        fun_riddles.FunRiddles(self.main_frame, self.window_width, self.window_height, self.show_instructions_callback)
 
 if __name__ == "__main__":
     app = Note()
