@@ -109,13 +109,16 @@ What am I?"""
             self.feedback_text = None
         
     def check_answer(self):
+        # Clear any existing feedback
+        self.clear_feedback()
+        
         answer = self.answer_entry.get().strip().lower()
         if answer == "echo":
             # Show correct answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 400,  # Moved down from +300 to +400
-                text="Correct! The answer is Echo!",
+                self.window_height//2 + 400,
+                text="Correct! Here is your first hint to the password... \"pa\"",
                 font=("Arial", 28, "bold"),
                 fill="green"
             )
@@ -125,7 +128,7 @@ What am I?"""
             # Show incorrect answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 400,  # Moved down from +300 to +400
+                self.window_height//2 + 400,
                 text="Try again!",
                 font=("Arial", 28, "bold"),
                 fill="red"
