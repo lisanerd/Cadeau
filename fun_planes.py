@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
+import master_password
 
 class FunPlanes:
     def __init__(self, main_frame, window_width, window_height, show_science_callback):
@@ -34,17 +35,17 @@ class FunPlanes:
         text_margin = 160
         self.canvas.create_text(
             window_width//2,
-            window_height//2 - 400,  # Moved back to -400 since we removed text
+            window_height//2 - 300,  # Moved down from -400 to -300
             text=question,
-            font=("Brush Script MT", 48),  # Restored to original size
+            font=("Brush Script MT", 48),
             fill="#8B4513",  # Brown text
             justify=tk.CENTER,
-            width=window_width - (2 * text_margin)  # Restored to original margin
+            width=window_width - (2 * text_margin)
         )
         
         # Create a frame for the radio buttons
         radio_frame = tk.Frame(self.main_frame, bg="#FFF8DC")
-        radio_frame.place(x=window_width//2, y=window_height//2 - 50, anchor="center")  # Moved up from 0 to make room for buttons
+        radio_frame.place(x=window_width//2, y=window_height//2 + 50, anchor="center")  # Moved down from -50 to +50
         
         # Create a variable to hold the selected answer
         self.selected_answer = tk.StringVar()
@@ -71,11 +72,11 @@ class FunPlanes:
                 justify=tk.LEFT,
                 wraplength=window_width - (4 * text_margin)  # Allow text to wrap
             )
-            rb.pack(pady=15)  # Increased padding between options
+            rb.pack(pady=15)
         
         # Create a frame for the buttons
         button_frame = tk.Frame(self.main_frame, bg="#FFF8DC")
-        button_frame.place(x=window_width//2, y=window_height//2 + 250, anchor="center")  # Moved down from +300 to prevent overlap
+        button_frame.place(x=window_width//2, y=window_height//2 + 300, anchor="center")  # Moved down from +250 to +300
         
         # Add submit button
         submit_button = tk.Button(
@@ -104,9 +105,9 @@ class FunPlanes:
         # Create next button but don't show it yet
         self.next_button = tk.Button(
             button_frame,
-            text="Félicitations!",
+            text="Next",
             font=("Arial", 24),
-            command=self.show_congratulations,
+            command=self.show_next,
             bg="#FFF8DC",
             fg="black",
             relief=tk.RAISED,
@@ -114,13 +115,16 @@ class FunPlanes:
         )
     
     def check_answer(self):
+        # Clear any existing feedback
+        self.clear_feedback()
+        
         answer = self.selected_answer.get()
         if answer == "B":
             # Show correct answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 400,
-                text="Correct!",
+                self.window_height//2 + 450,  # Moved down from +400 to +450
+                text="Correct! Here is your final hint to the password... \"et\"",
                 font=("Arial", 28, "bold"),
                 fill="green"
             )
@@ -130,44 +134,18 @@ class FunPlanes:
             # Show incorrect answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 400,
+                self.window_height//2 + 450,  # Moved down from +400 to +450
                 text="Try again!",
                 font=("Arial", 28, "bold"),
                 fill="red"
             )
     
-    def show_congratulations(self):
-        # Clear all widgets from the main frame
-        for widget in self.main_frame.winfo_children():
-            widget.destroy()
-        
-        # Create canvas for the congratulations message
-        self.canvas = tk.Canvas(self.main_frame, width=self.window_width, height=self.window_height, 
-                              bg="#FFF8DC", highlightthickness=0)
-        self.canvas.pack(expand=True, fill="both")
-        
-        # Add decorative border
-        border_padding = 80
-        self.canvas.create_rectangle(border_padding, border_padding, 
-                                   self.window_width-border_padding, self.window_height-border_padding, 
-                                   outline="#8B4513", width=4)
-        
-        # Add the congratulations message
-        message = """Félicitations Papa!
+    def show_next(self):
+        # Create and show the master password screen
+        master_password.MasterPassword(self.main_frame, self.window_width, self.window_height, 
+                                     lambda: self.__init__(self.main_frame, self.window_width, self.window_height, self.show_science_callback)) 
 
-Tu as résolu toutes les énigmes!
-Le password secret est: PAPA2024
-
-Je t'aime beaucoup!"""
-        
-        # Add the text with decorative font
-        text_margin = 160
-        self.canvas.create_text(
-            self.window_width//2,
-            self.window_height//2,
-            text=message,
-            font=("Brush Script MT", 48),
-            fill="#8B4513",
-            justify=tk.CENTER,
-            width=self.window_width - (2 * text_margin)
-        ) 
+    def clear_feedback(self):
+        if self.feedback_text:
+            self.canvas.delete(self.feedback_text)
+            self.feedback_text = None 
