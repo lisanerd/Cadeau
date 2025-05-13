@@ -144,7 +144,7 @@ class Final:
         self.canvas.create_text(
             window_width//2,
             window_height//2,
-            text="Je t'aime papa!",
+            text="Je t'aime à la folie mon papounet chéri d'amour!",
             font=love_font,
             fill='#FF1493',
             justify='center'
