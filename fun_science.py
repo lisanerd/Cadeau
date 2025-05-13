@@ -105,13 +105,16 @@ What invisible force keeps planes in the air?
             self.feedback_text = None
     
     def check_answer(self):
+        # Clear any existing feedback
+        self.clear_feedback()
+        
         answer = self.answer_entry.get().strip().lower()
         if answer == "lift":
             # Show correct answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
                 self.window_height//2 + 400,
-                text="Correct! Lift is the force that keeps planes in the air.",
+                text="Correct! Here is your third hint to the password... \"un\"",
                 font=("Arial", 28, "bold"),
                 fill="green"
             )
