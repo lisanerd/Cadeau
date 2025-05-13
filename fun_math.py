@@ -108,13 +108,16 @@ What is the value of the definite integral:
             self.feedback_text = None
         
     def check_answer(self):
+        # Clear any existing feedback
+        self.clear_feedback()
+        
         answer = self.answer_entry.get().strip().lower()
         if answer == "2":
             # Show correct answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 400,  # Moved down from +300 to make room for buttons
-                text="Correct! The integral equals 2!",
+                self.window_height//2 + 400,
+                text="Correct! Here is your second hint to the password... \"po\"",
                 font=("Arial", 28, "bold"),
                 fill="green"
             )
@@ -124,7 +127,7 @@ What is the value of the definite integral:
             # Show incorrect answer message
             self.feedback_text = self.canvas.create_text(
                 self.window_width//2,
-                self.window_height//2 + 400,  # Moved down from +300 to make room for buttons
+                self.window_height//2 + 400,
                 text="Try again!",
                 font=("Arial", 28, "bold"),
                 fill="red"
